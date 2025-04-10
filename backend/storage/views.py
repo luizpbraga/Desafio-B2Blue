@@ -44,6 +44,36 @@ class StationViewSet(viewsets.ModelViewSet):
                 notes='Pedido de coleta gerado automaticamente'
             )
 
+    @action(detail=True, methods=['post'])
+    def confirm_collection(self, request, pk=None):
+        """Confirmar a coleta e zerar o volume da estação"""
+        station = self.get_object()
+        
+        if not station.collection_requested:
+            return Response(
+                {'error': 'Não há pedido de coleta para esta estação.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+            
+        old_percentage = station.volume_percentage
+        station.volume_percentage = 0
+        station.collection_requested = False
+        station.save()
+        
+        # Registrar a coleta no histórico
+        StationHistory.objects.create(
+            station=station,
+            operation_type='collection_complete',
+            volume_percentage=0,
+            notes=f'Coleta confirmada. Volume anterior: {old_percentage}%'
+        )
+        
+        return Response({
+            'success': True,
+            'message': 'Coleta confirmada com sucesso.',
+            'station': StationSerializer(station).data
+        })
+
 class StationHistoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = StationHistory.objects.all()
     serializer_class = StationHistorySerializer
