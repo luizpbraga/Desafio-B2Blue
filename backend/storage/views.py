@@ -29,7 +29,7 @@ class StationViewSet(viewsets.ModelViewSet):
             station=station,
             operation_type='update',
             volume_percentage=new_percentage,
-            notes=f'Volume atualizado de {old_percentage}% para {new_percentage}%'
+            notes=f'Volume atualizado de {int(old_percentage)}% para {int(new_percentage)}%'
         )
 
        # Verificar se precisa solicitar coleta (80% ou mais)
@@ -65,7 +65,7 @@ class StationViewSet(viewsets.ModelViewSet):
             station=station,
             operation_type='collection_complete',
             volume_percentage=0,
-            notes=f'Coleta confirmada. Volume anterior: {old_percentage}%'
+            notes=f'Coleta confirmada. Volume anterior: {int(old_percentage)}%'
         )
         
         return Response({
