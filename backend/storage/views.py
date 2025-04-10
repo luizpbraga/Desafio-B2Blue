@@ -50,4 +50,10 @@ class StationHistoryViewSet(viewsets.ReadOnlyModelViewSet):
     
     def get_queryset(self):
         """Permite filtrar o histórico por estação"""
-        # TODO
+        queryset = StationHistory.objects.all()
+        station_id = self.request.query_params.get('station_id', None)
+        
+        if station_id is not None:
+            queryset = queryset.filter(station_id=station_id)
+            
+        return queryset
