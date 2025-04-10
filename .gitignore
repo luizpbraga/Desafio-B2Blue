@@ -1,0 +1,7 @@
+install.sh
+frontend/build
+frontend/node_modules
+backend/db.sqlite3
+__pycache__
+backend/storage/migrations
+
