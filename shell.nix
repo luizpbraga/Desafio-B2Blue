@@ -4,6 +4,7 @@ pkgs.mkShell {
     python3
     nodejs
     sqlite
+    poetry
   ];
   shellHook = ''
     zsh
