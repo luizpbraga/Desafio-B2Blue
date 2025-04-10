@@ -20,7 +20,29 @@ class StationViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         """Atualizar o volume da estação e verificar se precisa solicitar coleta"""
-        # TODO
+        old_percentage = self.get_object().volume_percentage
+        station = serializer.save()
+        new_percentage = station.volume_percentage
+        
+        # Registrar a atualização no histórico
+        StationHistory.objects.create(
+            station=station,
+            operation_type='update',
+            volume_percentage=new_percentage,
+            notes=f'Volume atualizado de {old_percentage}% para {new_percentage}%'
+        )
+
+       # Verificar se precisa solicitar coleta (80% ou mais)
+        if new_percentage >= 80 and not station.collection_requested:
+            station.collection_requested = True
+            station.save()
+            
+            StationHistory.objects.create(
+                station=station,
+                operation_type='collection_request',
+                volume_percentage=new_percentage,
+                notes='Pedido de coleta gerado automaticamente'
+            )
 
 class StationHistoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = StationHistory.objects.all()
