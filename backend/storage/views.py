@@ -10,7 +10,13 @@ class StationViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         """Criar uma nova estação e registrar no histórico"""
-        #TODO
+        station = serializer.save()
+        StationHistory.objects.create(
+            station=station,
+            operation_type='create',
+            volume_percentage=station.volume_percentage,
+            notes='Estação criada'
+        )
 
     def perform_update(self, serializer):
         """Atualizar o volume da estação e verificar se precisa solicitar coleta"""
