@@ -85,11 +85,10 @@ O sistema implementa:
 Primeiramente, clone o repositório: 
 ```sh
     git clone git@github.com:luizpbraga/Desafio-B2Blue.git
-    cd Desafio-B2Blue
 ```
 ### Backend (Django)
 ```sh
-    cd backend 
+    cd Desafio-B2Blue/backend
 
     # Instalar dependências
     pip install django djangorestframework django-cors-headers
@@ -108,7 +107,7 @@ Primeiramente, clone o repositório:
 ### Frontend (React)
 ```sh
     # Navegar até a pasta do frontend
-    cd frontend
+    cd Desafio-B2Blue/frontend
 
     # Instalar dependências
     npm install
