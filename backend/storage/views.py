@@ -3,14 +3,22 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Station, StationHistory
 from .serializers import StationSerializer, StationHistorySerializer
-from .pagination import StandardResultsSetPagination
+# from .pagination import StandardResultsSetPagination
 
 class StationViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet for managing storage stations.
+
+    Provides standard CRUD operations for Station objects
+    with additional collection management functionality.
+    """
+
     queryset = Station.objects.all()
     serializer_class = StationSerializer
 
     def perform_create(self, serializer):
-        """Criar uma nova estação e registrar no histórico"""
+        """Create a new station and record creation in history"""
+
         station = serializer.save()
         StationHistory.objects.create(
             station=station,
@@ -20,7 +28,11 @@ class StationViewSet(viewsets.ModelViewSet):
         )
 
     def perform_update(self, serializer):
-        """Atualizar o volume da estação e verificar se precisa solicitar coleta"""
+        """
+        Update station volume and automatically manage collection requests
+        when threshold is exceeded.
+        """
+
         old_percentage = self.get_object().volume_percentage
         station = serializer.save()
         new_percentage = station.volume_percentage
@@ -47,7 +59,13 @@ class StationViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def confirm_collection(self, request, pk=None):
-        """Confirmar a coleta e zerar o volume da estação"""
+        """
+        Confirm waste collection for a station.
+        
+        Resets the station's volume to zero and marks collection as complete.
+        Returns 400 if no collection was previously requested.
+        """
+
         station = self.get_object()
         
         if not station.collection_requested:
@@ -76,12 +94,23 @@ class StationViewSet(viewsets.ModelViewSet):
         })
 
 class StationHistoryViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    ViewSet for viewing station history records.
+    
+    Provides read-only access to history with filtering capabilities.
+    """
+
     queryset = StationHistory.objects.all()
     serializer_class = StationHistorySerializer
-    pagination_class = StandardResultsSetPagination
-    
+    # TODO: pagination_class = StandardResultsSetPagination
+
     def get_queryset(self):
-        """Permite filtrar o histórico por estação"""
+        """
+        Return filtered history records based on query parameters.
+        
+        Supports filtering by station_id.
+        """
+
         queryset = StationHistory.objects.all()
         station_id = self.request.query_params.get('station_id', None)
         
