@@ -1,12 +1,13 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
+from .validators import validate_volume_percentage
 
 class Station(models.Model):
     """Model representing a waste storage station"""
     name = models.CharField(max_length=100)
     volume_percentage = models.FloatField(
         default=0,
-        validators=[MinValueValidator(0), MaxValueValidator(100)]
+        validators=[MinValueValidator(0), MaxValueValidator(100), validate_volume_percentage]
     )
     collection_requested = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -14,6 +15,11 @@ class Station(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.volume_percentage}%"
+
+    def save(self, *args, **kwargs):
+        """Override save to ensure validation runs"""
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 class StationHistory(models.Model):
     """Model to store the history of station operations"""
