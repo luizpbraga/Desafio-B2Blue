@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Station, StationHistory
 from .serializers import StationSerializer, StationHistorySerializer
-# from .pagination import StandardResultsSetPagination
+from .pagination import StandardResultsSetPagination
 
 class StationViewSet(viewsets.ModelViewSet):
     """
@@ -102,7 +102,7 @@ class StationHistoryViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = StationHistory.objects.all()
     serializer_class = StationHistorySerializer
-    # TODO: pagination_class = StandardResultsSetPagination
+    # pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         """
