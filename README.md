@@ -4,6 +4,25 @@ Storage Volume Control System
 ## Overview
 This system was developed for B2Blue with the objective of managing waste storage volume control. It allows monitoring the occupancy level of storage stations, automatically generating collection requests when the volume reaches 80%, and recording the entire history of operations.
 
+## Table of Contents
+1. [Technologies Used](#technologies-used)
+   - [Backend](#backend)
+   - [Frontend](#frontend)
+2. [System Architecture](#system-architecture)
+3. [Data Structure](#data-structure)
+   - [Main Models](#main-models)
+4. [Key Features](#key-features)
+5. [Operation Flow](#operation-flow)
+6. [REST API](#rest-api)
+7. [Security](#security)
+8. [Prerequisites](#prerequisites)
+9. [Installation and Execution](#installation-and-execution-instructions)
+   - [Docker Compose](#build-with-docker-compose)
+   - [Backend Setup](#backend-django)
+   - [Frontend Setup](#frontend-react)
+   - [Accessing the Application](#accessing-your-application)
+10. [Final Considerations](#final-considerations)
+
 ## Technologies Used
 ### Backend
 - Django: Python web framework for rapid development  
