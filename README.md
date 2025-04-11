@@ -99,7 +99,7 @@ The system implements:
 - CSRF protection for POST requests  
 - CORS configuration to allow only the frontend to access the API  
 
-### Prerequisites
+## Prerequisites
 - Python: 3.8+
 - node: 23.10.0
 
