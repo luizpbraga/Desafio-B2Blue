@@ -100,7 +100,7 @@ The system implements:
 - CORS configuration to allow only the frontend to access the API  
 
 ## Prerequisites
-- Python: 3.8+
+- Python: 3.12^
 - node: 23.10.0
 
 ## Installation and Execution Instructions
