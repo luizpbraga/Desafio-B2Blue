@@ -1,9 +1,13 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Station(models.Model):
-    """Modelo para representar uma estação de armazenamento de resíduos"""
+    """Model representing a waste storage station"""
     name = models.CharField(max_length=100)
-    volume_percentage = models.FloatField(default=0)
+    volume_percentage = models.FloatField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
     collection_requested = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -12,7 +16,7 @@ class Station(models.Model):
         return f"{self.name} - {self.volume_percentage}%"
 
 class StationHistory(models.Model):
-    """Modelo para armazenar o histórico de operações das estações"""
+    """Model to store the history of station operations"""
     station = models.ForeignKey(Station, on_delete=models.CASCADE, related_name='history')
     operation_type = models.CharField(max_length=50)  # 'update', 'collection_request', 'collection_complete'
     volume_percentage = models.FloatField()
@@ -23,5 +27,5 @@ class StationHistory(models.Model):
         return f"{self.station.name} - {self.operation_type} - {self.timestamp}"
 
     class Meta:
-        """Os registros serão ordenados pelo campo timestamp em ordem decrescente"""
+        """Records will be ordered by timestamp in descending order"""
         ordering = ['-timestamp']
