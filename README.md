@@ -89,6 +89,13 @@ First, clone the repository:
 ```sh
     git clone git@github.com:luizpbraga/Desafio-B2Blue.git
 ```
+### Build with Docker Compose
+```sh
+cd Desafio-B2Blue
+docker-compose up --build
+```
+see [Assing Application subsection](accessing-your-application) after build completes.
+
 ### Backend (Django)
 1. Go to folder
 ```bash
@@ -133,5 +140,9 @@ npm install
 ```sh
 npm start
 ```
+### Accessing Your Application
+- Frontend: <http://localhost:3000>
+- Backend: <http://localhost:8000>
+
 ## Final Considerations
 This project implements all the requirements specified in the B2Blue challenge, focusing on structured communication between frontend and backend through a REST API using Django REST Framework. The user interface is responsive and follows modern design principles with Material UI.
