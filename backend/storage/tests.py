@@ -17,7 +17,7 @@ class StationModelTests(TestCase):
     def test_station_str_representation(self):
         """Test string representation of a station"""
         station = Station.objects.create(name="Test Station", volume_percentage=50)
-        self.assertEqual(str(station), "Test Station - 50%")
+        self.assertEqual(str(station), "Test Station - 50.0%")
 
 
 class StationHistoryModelTests(TestCase):
