@@ -1,120 +1,137 @@
-# Desafio-B2Blue
-Sistema de Controle de Volume de Armazenamento
-## Visão Geral
-Este sistema foi desenvolvido para a B2Blue com o objetivo de gerenciar o controle de volume de armazenamento de resíduos. Ele permite monitorar o nível de ocupação de estações de armazenamento, gerar pedidos de coleta automaticamente quando o volume atinge 80% e registrar todo o histórico de operações.
+# B2Blue Challenge
+Storage Volume Control System
 
-## Tecnologias Utilizadas
+## Overview
+This system was developed for B2Blue with the objective of managing waste storage volume control. It allows monitoring the occupancy level of storage stations, automatically generating collection requests when the volume reaches 80%, and recording the entire history of operations.
+
+## Technologies Used
 ### Backend
-- Django: Framework web Python para desenvolvimento rápido
-- Django REST Framework: Extensão para criação de APIs RESTful
-- SQLite: Banco de dados relacional para armazenamento dos dados
+- Django: Python web framework for rapid development  
+- Django REST Framework: Extension for creating RESTful APIs  
+- SQLite: Relational database for data storage  
 
 ### Frontend
-- React: Biblioteca JavaScript para construção de interfaces
-- Material UI: Framework de componentes React para design consistente
-- Axios: Cliente HTTP para comunicação com a API
+- React: JavaScript library for building interfaces  
+- Material UI: React component framework for consistent design  
+- Axios: HTTP client for API communication  
 
-## Arquitetura do Sistema
-O sistema segue uma arquitetura cliente-servidor dividida em duas partes:
-    1. Backend (Django): Responsável pela lógica de negócio, persistência de dados e exposição da API REST
-    2. Frontend (React): Interface de usuário que consome a API para exibir e manipular os dados
+## System Architecture
+The system follows a client-server architecture divided into two parts:  
+    1. Backend (Django): Handles business logic, data persistence, and exposes the REST API  
+    2. Frontend (React): User interface that consumes the API to display and manipulate data  
 
-## Estrutura de Dados
-### Modelos Principais
+## Data Structure
+### Main Models
 
-1. Station
-    - Atributos:
-        - name: Nome da estação
-        - volume_percentage: Percentual de volume ocupado (0-100%)
-        - collection_requested: Flag que indica se há um pedido de coleta pendente
-        - created_at: Data/hora de criação
-        - updated_at: Data/hora da última atualização
+1. Station  
+    - Attributes:  
+        - name: Station name  
+        - volume_percentage: Occupied volume percentage (0-100%)  
+        - collection_requested: Flag indicating if there is a pending collection request  
+        - created_at: Creation date/time  
+        - updated_at: Last update date/time  
 
-2. StationHistory
-    - Atributos:
-        - station: Referência à estação (chave estrangeira)
-        - operation_type: Tipo de operação ('create', 'update', 'collection_request', 'collection_complete')
-        - volume_percentage: Percentual de volume no momento da operação
-        - timestamp: Data/hora da operação
-        - notes: Observações sobre a operação
+2. StationHistory  
+    - Attributes:  
+        - station: Reference to the station (foreign key)  
+        - operation_type: Type of operation ('create', 'update', 'collection_request', 'collection_complete')  
+        - volume_percentage: Volume percentage at the time of the operation  
+        - timestamp: Operation date/time  
+        - notes: Notes about the operation  
 
-## Funcionalidades Principais
+## Key Features
 
-1. Gerenciamento de Estações
-    - Visualização do status atual de todas as estações
-    - Ajuste de volume de cada estação
-    - Identificação visual de estações com pedido de coleta pendente
+1. Station Management  
+    - View the current status of all stations  
+    - Adjust the volume of each station  
+    - Visual identification of stations with pending collection requests  
 
-2. Geração Automática de Pedidos de Coleta
-    - Quando uma estação atinge ou ultrapassa 80% de ocupação, um pedido de coleta é gerado automaticamente
-    - As estações com pedido de coleta são destacadas visualmente
+2. Automatic Collection Request Generation  
+    - When a station reaches or exceeds 80% occupancy, a collection request is automatically generated  
+    - Stations with collection requests are visually highlighted  
 
-3. Confirmação de Coleta
-    - Usuários podem confirmar que a coleta foi realizada
-    - Após a confirmação, o volume da estação é zerado automaticamente
+3. Collection Confirmation  
+    - Users can confirm that the collection has been completed  
+    - After confirmation, the station's volume is automatically reset to zero  
 
-4. Histórico Completo de Operações
-    - Todas as operações são registradas no histórico
-    - O histórico pode ser consultado completo ou filtrado por estação
+4. Complete Operation History  
+    - All operations are recorded in the history  
+    - The history can be viewed in full or filtered by station  
 
+## Operation Flow
+- The user views the current status of the stations on the dashboard  
+- The user can adjust a station's volume using the slider  
+- If the updated volume reaches 80% or more, the system automatically generates a collection request  
+- With a pending collection request, the "Confirm Collection" button becomes available  
+- Clicking the confirmation button records the collection and resets the station's volume to zero  
+- All these operations are recorded in the history at the bottom of the screen  
 
+## REST API
+The API follows RESTful principles and uses standard HTTP formats for communication:  
+- Read requests use the GET method  
+- Creations use POST  
+- Updates use PUT or PATCH  
+- Deletions use DELETE  
+- Data is transferred in JSON format  
 
-## Fluxo de Operações
-- O usuário visualiza o status atual das estações no painel
-- O usuário pode ajustar o volume de uma estação através do slider
-- Se o volume atualizado atingir 80% ou mais, o sistema gera automaticamente um pedido de coleta
-- Com o pedido de coleta pendente, o botão "Confirmar Coleta" fica disponível
-- Ao clicar no botão de confirmação, o sistema registra a coleta e zera o volume da estação
-- Todas essas operações são registradas no histórico na parte inferior da tela
+## Security
+The system implements:  
+- Backend data validation  
+- CSRF protection for POST requests  
+- CORS configuration to allow only the frontend to access the API  
 
-## API REST
-A API segue os princípios RESTful e utiliza os formatos padrão HTTP para comunicação:
-- As requisições de leitura usam o método GET
-- As criações usam POST
-- As atualizações usam PUT ou PATCH
-- As exclusões usam DELETE
-- Os dados são transferidos no formato JSON
+### Prerequisites
+- Python: 3.8+
+- node: 23.10.0
 
-## Segurança
-O sistema implementa:
-- Validação de dados no backend
-- Proteção contra ataques CSRF nas requisições POST
-- Configuração CORS para permitir apenas que o frontend acesse a API
-
-## Instruções de Instalação e Execução
-Primeiramente, clone o repositório: 
+## Installation and Execution Instructions
+First, clone the repository: 
 ```sh
     git clone git@github.com:luizpbraga/Desafio-B2Blue.git
 ```
 ### Backend (Django)
-```sh
-    cd Desafio-B2Blue/backend
-
-    # Instalar dependências
-    pip install django djangorestframework django-cors-headers
-
-    # Executar migrações
-    python manage.py makemigrations
-    python manage.py migrate
-
-    # Inicializar estações
-    python manage.py setup_initial_data
-
-    # Iniciar servidor
-    python manage.py runserver
+1. Go to folder
+```bash
+cd Desafio-B2Blue/backend
 ```
 
+2. Create and activate a virtual environment
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+4. Run migrations
+```bash
+python manage.py migrate
+```
+
+5. Create initial data (stations)
+```bash
+python manage.py setup_initial_data
+```
+
+6. Run the development server
+```bash
+python manage.py runserver
+```
 ### Frontend (React)
+1 Navegate to the frontend folder
 ```sh
-    # Navegar até a pasta do frontend
-    cd Desafio-B2Blue/frontend
-
-    # Instalar dependências
-    npm install
-
-    # Iniciar servidor de desenvolvimento
-    npm start
+cd Desafio-B2Blue/frontend
 ```
-
-## Considerações Finais
-Este projeto implementa todos os requisitos especificados no desafio da B2Blue, com foco na comunicação estruturada entre frontend e backend através de uma API REST utilizando Django REST Framework. A interface do usuário é responsiva e segue princípios de design moderno com Material UI.
+2. Install dependencies
+```sh
+npm install
+```
+3. Run the development server
+```sh
+npm start
+```
+## Final Considerations
+This project implements all the requirements specified in the B2Blue challenge, focusing on structured communication between frontend and backend through a REST API using Django REST Framework. The user interface is responsive and follows modern design principles with Material UI.
