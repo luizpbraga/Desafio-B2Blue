@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Station, StationHistory
 from .serializers import StationSerializer, StationHistorySerializer
+from .pagination import StandardResultsSetPagination
 
 class StationViewSet(viewsets.ModelViewSet):
     queryset = Station.objects.all()
@@ -29,7 +30,7 @@ class StationViewSet(viewsets.ModelViewSet):
             station=station,
             operation_type='update',
             volume_percentage=new_percentage,
-            notes=f'Volume atualizado de {int(old_percentage)}% para {int(new_percentage)}%'
+            notes=f'Volume atualizado de {old_percentage}% para {new_percentage}%'
         )
 
        # Verificar se precisa solicitar coleta (80% ou mais)
@@ -65,7 +66,7 @@ class StationViewSet(viewsets.ModelViewSet):
             station=station,
             operation_type='collection_complete',
             volume_percentage=0,
-            notes=f'Coleta confirmada. Volume anterior: {int(old_percentage)}%'
+            notes=f'Coleta confirmada. Volume anterior: {old_percentage}%'
         )
         
         return Response({
@@ -77,6 +78,7 @@ class StationViewSet(viewsets.ModelViewSet):
 class StationHistoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = StationHistory.objects.all()
     serializer_class = StationHistorySerializer
+    pagination_class = StandardResultsSetPagination
     
     def get_queryset(self):
         """Permite filtrar o histórico por estação"""
