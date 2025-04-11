@@ -15,29 +15,49 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import WarningIcon from '@mui/icons-material/Warning';
 
+/**
+ * Card component representing a single waste collection station.
+ * Shows current volume, allows volume adjustment, and collection confirmation.
+ * @param {object} props - Component props
+ * @param {object} props.station - Station data object
+ * @param {function} props.onUpdateVolume - Callback for volume updates
+ * @param {function} props.onConfirmCollection - Callback for collection confirmation
+ */
 const StationCard = ({ station, onUpdateVolume, onConfirmCollection }) => {
   const [sliderValue, setSliderValue] = useState(station.volume_percentage);
   const [isEditing, setIsEditing] = useState(false);
 
-  // Determinar a cor da barra de progresso com base no volume
+  /**
+   * Determines the color for the progress bar based on fill percentage.
+   * @param {number} percentage - Current fill percentage (0-100)
+   * @returns {string} Color name for the progress bar
+   */
   const getProgressColor = (percentage) => {
     if (percentage < 50) return 'success';
     if (percentage < 80) return 'warning';
     return 'error';
   };
 
-  // Lidar com a mudança no slider
+  /**
+   * Handles slider value changes during editing.
+   * @param {object} event - React change event
+   * @param {number} newValue - New slider value
+   */
   const handleSliderChange = (event, newValue) => {
     setSliderValue(newValue);
   };
 
-  // Salvar a mudança de volume
+  /**
+   * Saves the new volume value to the API and exits edit mode.
+   */
   const handleSaveVolume = () => {
     onUpdateVolume(station.id, sliderValue);
     setIsEditing(false);
   };
 
-  // Cancelar a edição
+  /**
+   * Cancels editing and resets to the original volume value.
+   */
   const handleCancelEdit = () => {
     setSliderValue(station.volume_percentage);
     setIsEditing(false);

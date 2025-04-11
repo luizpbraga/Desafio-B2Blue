@@ -5,21 +5,32 @@ import StationCard from './components/StationCard';
 import HistoryTable from './components/HistoryTable';
 import { api, endpoints } from './services/api';
 
+/**
+ * Main application component for the Storage Control System.
+ * Manages station data, operation history, and provides UI for user interactions.
+ */
 function App() {
-  const [stations, setStations] = useState([]);
-  const [history, setHistory] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [stations, setStations] = useState([]); // Array of station objects
+  const [history, setHistory] = useState([]);    // Array of historical operations
+  const [loading, setLoading] = useState(true); // Loading state flag
+  const [error, setError] = useState(null);     // Error message state
 
-  // Carregar os dados iniciais
+  /**
+   * Effect hook to load initial data when component mounts.
+   * Fetches both stations and history data simultaneously.
+   */
   useEffect(() => {
     fetchData();
   }, []);
 
-  // Função para buscar todas as estações e histórico
+  /**
+   * Fetches all stations and history data from the API.
+   * Handles loading states and errors during the fetch operation.
+   */
   const fetchData = async () => {
     setLoading(true);
     try {
+      // Fetch both stations and history data in parallel
       const [stationsRes, historyRes] = await Promise.all([
         api.get(endpoints.stations),
         api.get(endpoints.history)
@@ -29,51 +40,59 @@ function App() {
       setHistory(historyRes.data);
       setError(null);
     } catch (err) {
-      console.error('Erro ao carregar dados:', err);
+      console.error('Error loading data:', err);
       setError('Falha ao carregar os dados. Por favor, tente novamente.');
     } finally {
       setLoading(false);
     }
   };
 
-  // Atualizar o volume de uma estação
+  /**
+   * Updates the volume percentage for a specific station.
+   * @param {string} stationId - ID of the station to update
+   * @param {number} newPercentage - New volume percentage value (0-100)
+   */
   const updateStationVolume = async (stationId, newPercentage) => {
     try {
       const response = await api.patch(`${endpoints.stations}${stationId}/`, {
         volume_percentage: newPercentage
       });
       
-      // Atualizar a lista de estações
+      // Update the station in the local state
       setStations(stations.map(s => 
         s.id === stationId ? response.data : s
       ));
       
-      // Recarregar o histórico
+      // Refresh history data
       const historyRes = await api.get(endpoints.history);
       setHistory(historyRes.data);
       
     } catch (err) {
-      console.error('Erro ao atualizar volume:', err);
+      console.error('Error updating volume:', err);
       alert('Falha ao atualizar o volume. Por favor, tente novamente.');
     }
   };
 
-  // Confirmar coleta de resíduos
+  /**
+   * Confirms waste collection for a specific station.
+   * Resets the station's volume and records the collection event.
+   * @param {string} stationId - ID of the station to confirm collection
+   */
   const confirmCollection = async (stationId) => {
     try {
       const response = await api.post(`${endpoints.stations}${stationId}/confirm_collection/`);
       
-      // Atualizar a lista de estações
+      // Update the station in the local state
       setStations(stations.map(s => 
         s.id === stationId ? response.data.station : s
       ));
       
-      // Recarregar o histórico
+      // Refresh history data
       const historyRes = await api.get(endpoints.history);
       setHistory(historyRes.data);
       
     } catch (err) {
-      console.error('Erro ao confirmar coleta:', err);
+      console.error('Error confirming collection:', err);
       alert('Falha ao confirmar a coleta. Por favor, tente novamente.');
     }
   };
@@ -87,6 +106,7 @@ function App() {
             Sistema de Controle de Armazenamento - B2Blue
           </Typography>
           
+          {/* Error display */}
           {error && (
             <Paper 
               elevation={3} 
@@ -96,6 +116,7 @@ function App() {
             </Paper>
           )}
           
+          {/* Stations grid */}
           <Grid container spacing={4} sx={{ mb: 4 }}>
             {stations.map((station) => (
               <Grid item xs={12} md={4} key={station.id}>
@@ -108,6 +129,7 @@ function App() {
             ))}
           </Grid>
           
+          {/* History section */}
           <Paper elevation={3} sx={{ p: 3 }}>
             <Typography variant="h5" gutterBottom color="primary">
               Histórico de Operações

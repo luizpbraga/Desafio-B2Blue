@@ -13,7 +13,11 @@ import {
   Typography
 } from '@mui/material';
 
-// Função para obter a cor e o rótulo da operação
+/**
+ * Determines the display properties for different operation types.
+ * @param {string} type - The operation type (create, update, collection_request, collection_complete)
+ * @returns {object} An object containing color and label for the operation chip
+ */
 const getOperationInfo = (type) => {
   switch (type) {
     case 'create':
@@ -29,8 +33,15 @@ const getOperationInfo = (type) => {
   }
 };
 
+/**
+ * Displays a table of historical operations for waste collection stations.
+ * Shows loading state and empty state when appropriate.
+ * @param {object} props - Component props
+ * @param {Array} props.history - Array of history records
+ * @param {boolean} props.loading - Loading state flag
+ */
 const HistoryTable = ({ history, loading }) => {
-  // Se estiver carregando, mostrar indicador de carregamento
+  // Loading state
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
@@ -39,7 +50,7 @@ const HistoryTable = ({ history, loading }) => {
     );
   }
   
-  // Se não houver registros no histórico
+  // Empty state
   if (history.length === 0) {
     return (
       <Box sx={{ p: 2, textAlign: 'center' }}>
